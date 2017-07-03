@@ -24,7 +24,7 @@ public abstract class JsonBasedResultModel extends TextBasedResultModel {
 
     @Override
     protected ContentType getResultContentType() {
-        return super.getResultContentType();
+        return ContentType.JSON;
     }
 
     protected abstract Object getObject();

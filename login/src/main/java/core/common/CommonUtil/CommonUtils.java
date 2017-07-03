@@ -24,7 +24,30 @@ public class CommonUtils {
 
 	private CommonUtils() {
 	}
-	
+
+	/**
+	 * 文本工具类
+	 */
+	public static class TextUtil{
+
+
+		public static boolean isNotEmpty(String text){
+			return !isEmpty(text);
+		}
+		/**
+		 * 判断字符串是否为空
+		 */
+		public static boolean isEmpty(String text){
+			if(text == null){
+				return true;
+			}
+
+			text = text.trim().toLowerCase().replace("'|\"", "");
+
+			return "".equals(text) || "null".equals(text);
+		}
+	}
+
 	public static class FileUtil{
 		
 		public static Properties loadProperties(String filePath) throws FrameworkInternalException {
@@ -63,6 +86,16 @@ public class CommonUtils {
 			builder.setExclusionStrategies(new GsonExclusionStrategy());
 			gson = builder.serializeNulls().create();
 
+		}
+
+		/**
+		 * 获取 gson 对象
+		 *
+		 * @return
+		 */
+		public static Gson getGson(){
+
+			return gson;
 		}
 		
 		public static String object2Json(Object object){
@@ -163,5 +196,44 @@ public class CommonUtils {
 			DateFormat df = new SimpleDateFormat(datePattern.toString());
 			return df.format(date);
 		}
+
+		public static  Date parseDate(String date){
+			if(null == date){
+				return null;
+			}
+
+			date = date.trim();
+			if (-1 != date.indexOf("中国标准时间") || -1 != date.indexOf("CST")){
+				return new Date(Date.parse(date));
+			}
+			return parseDate(date,getPatternBySample(date));
+		}
+
+		public static Date parseDate(String date,DATE_PATTERN pattern){
+
+			try{
+				DateFormat df = new SimpleDateFormat(pattern.toString());
+				return df.parse(date);
+			}catch (Exception e){
+				throw new FrameworkInternalException(new SystemExceptionDesc(e));
+			}
+		}
+
+		public static DATE_PATTERN getPatternBySample(String date){
+
+			if(null != date){
+
+				date = date.trim();
+
+				for (DATE_PATTERN value : DATE_PATTERN.values()){
+
+					if (date.matches(value.pattern)){
+						return value;
+					}
+				}
+			}
+			throw new FrameworkInternalException(new SystemExceptionDesc("日期为空或是不支持的样本格式：" + date));
+		}
+
 	}
 }

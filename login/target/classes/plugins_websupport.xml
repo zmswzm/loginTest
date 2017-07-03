@@ -13,7 +13,7 @@
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
 	<!-- 定义 web 视图配置 -->
-	<bean name="webViewConfig" class="com.test.login.controller.WebViewConfig">
+	<bean name="webViewConfig" class="core.common.controller.WebViewConfig">
 		<property name="requestUrlBasePath" value="^.*/webtest/"/>
 		<property name="mappingBasePath" value="/"/>
 		<property name="mappingFileName" value="url_mappings"/>
