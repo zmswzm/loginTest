@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd">
+
+    <!-- 自定义 gson 工厂类 -->
+    <bean id="gsonFactoryBeanForMessageConverter" class="core.common.utils.GsonFactoryBeanForMessageConverter" />
+
+    <mvc:annotation-driven>
+        <mvc:message-converters >
+            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+                <property name="gson">
+                 <bean class="com.google.gson.Gson" factory-bean="gsonFactoryBeanForMessageConverter" factory-method="getGson" />
+             </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**/*"/>
+            <mvc:exclude-mapping path="/system/**"/>
+            <mvc:exclude-mapping path="/resources/**"/>
+            <bean class="core.support.filter.CharsetFilter">
+                <property name="charset" value="UTF-8"/>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <context:component-scan base-package="core" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+    </context:component-scan>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+          p:viewClass="org.springframework.web.servlet.view.JstlView"
+          p:prefix="/system/"
+          p:suffix=".jsp"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/user/login.*" />
+            <mvc:exclude-mapping path="/login.*" />
+            <mvc:exclude-mapping path="/resources/**" />
+            <mvc:exclude-mapping path="/system/**" />
+
+            <bean class="core.interceptor.Filter_0_SystemInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>

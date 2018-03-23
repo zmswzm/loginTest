@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd">
+	
+	<!-- 定义 web 视图配置 -->
+	<bean name="webViewConfig" class="core.common.controller.WebViewConfig">
+		<property name="requestUrlBasePath" value="^.*/syedu/"/>
+		<property name="mappingBasePath" value="/"/>
+		<property name="mappingFileName" value="url_mappings"/>
+	</bean>
+	
+</beans>

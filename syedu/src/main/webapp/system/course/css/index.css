@@ -1,0 +1,11 @@
+/* Form */
+
+@media screen and (max-width: 480px) {
+
+}
+@media screen and (min-width: 480px) {
+  #course-list{
+    padding-left: 22%;
+    padding-right: 22%
+  }
+}
